@@ -1,0 +1,3 @@
+rawpy >= 0.18.1
+imageio >= 2.31.3
+exifread >= 3.0.0
