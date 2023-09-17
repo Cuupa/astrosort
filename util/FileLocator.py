@@ -1,11 +1,10 @@
 import os
 import platform
-import re
 
 CANON_RAW = '.cr2'
 
 
-def find_images_on_removable():
+def find_images_on_removable() -> list[str]:
     operating_system = platform.system()
 
     removables = []
@@ -15,7 +14,7 @@ def find_images_on_removable():
     return _list_images(images_location)
 
 
-def _list_images(location):
+def _list_images(location) -> list[str]:
     if location is None:
         return []
     image_files = []
@@ -39,6 +38,8 @@ def _search_for_images(removables) -> str | None:
 
         if _check_canon(dirs):
             return fixed_drive
+        elif _check_ASIair(dirs):
+            return fixed_drive
     return None
 
 
@@ -50,18 +51,17 @@ def _try_get_dir_content(dir):
 
 
 def _check_canon(dirs) -> bool:
-    for dir in dirs:
-        if dir.endswith('DCIM'):
+    for _dir in dirs:
+        if _dir.endswith('DCIM'):
             return True
     return False
-    '''
-    regex = '([1-9]?[0-9]{2})EOS[1-9]{1}[0-9]{0,2}D'
-    for dir in dirs:
-        found = re.search(regex, dir)
-        if found:
+
+
+def _check_ASIair(dirs) -> bool:
+    for _dir in dirs:
+        if _dir.endswith('ASIair'):
             return True
     return False
-    '''
 
 
 def _find_removable_windows() -> list[str]:

@@ -6,6 +6,7 @@ import frames.FrameDetector as frames
 import util.Logger as logger
 import module.FilenameModule as asiair
 
+
 def main():
     options = pr.read()
     logger.init(options['logging'])
@@ -29,23 +30,22 @@ def main():
         black_pixels = 0
         white_pixels = 0
 
-        image = 'H:\\ASIair\\Autorun\\M31\\Light_M31_60.0s_Bin1_B_Gain133_20230906-003033_-10.0C_0001.cr2'
-
         if asiair.is_valid(image, options['pattern']):
             logger.write('Filename matching ASIAIR template - contains type')
             asiair.process(image, options)
 
-
         if cr2.is_valid(image):
             logger.write('Identified as CR2 canon RAW image')
-            black_pixels, white_pixels = cr2.count_black_pixels(image, options['black_treshold'], options['white_treshold'])
+            black_pixels, white_pixels = cr2.count_black_pixels(image, options['black_treshold'],
+                                                                options['white_treshold'])
         if frames.is_bias_frame(exif['exposure']):
             logger.write('Identified as a bias frame')
             bias_frames.append(image)
         elif frames.is_dark_frame(black_pixels, exif['width'], exif['length'], options['dark_frames_treshold']):
             logger.write('Identified as a dark frame')
             dark_frames.append(image)
-        elif frames.is_flat_frame(black_pixels, white_pixels, exif['width'], exif['length'], options['flat_frames_treshold']):
+        elif frames.is_flat_frame(black_pixels, white_pixels, exif['width'], exif['length'],
+                                  options['flat_frames_treshold']):
             logger.write('Identified as a flat frame')
             flat_frames.append(image)
         else:
